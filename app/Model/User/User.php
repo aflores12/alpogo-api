@@ -16,7 +16,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'first_name', 'last_name' ,'email', 'password',
+        'first_name', 'last_name' ,'email', 'passport', 'birthday', 'password',
     ];
 
     /**
@@ -28,7 +28,25 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
+    /**
+     * Genera un random Token para validar el registro posteriormente
+     * y una fecha de last_login
+     */
+    public static function boot()
+    {
+        parent::boot();
 
+        static::creating(function ($user) {
+            $user->token = str_random(30);
+            $user->last_login = date('Y/m/d');
+        });
+
+    }
+
+    /**
+     * Retorna los roles a los que pertenece el usuario
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
     public function roles()
     {
         return $this->belongsToMany(Role::class);

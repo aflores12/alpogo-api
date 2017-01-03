@@ -19,6 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('last_name');
             $table->string('email')->unique();
             $table->string('password');
+            $table->string('birthday')->default('0000/00/00');
             $table->string('token')->nulleable();
             $table->boolean('validated')->default(false);
             $table->string('last_login')->nulleable();

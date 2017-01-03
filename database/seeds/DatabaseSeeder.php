@@ -11,13 +11,15 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+
         DB::table('users')->insert([
             'first_name' => 'Alan',
             'last_name' => 'Flores',
             'email' => str_random(10).'@gmail.com',
             'password' => bcrypt('secret'),
+            'birthday' => '1989/04/09',
             'token' => str_random(10),
-            'last_login' => '27-12-2016',
+            'last_login' => '2016/12/27',
             'passport' => 34335174
         ]);
 
