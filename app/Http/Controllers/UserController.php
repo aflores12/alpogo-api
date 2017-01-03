@@ -26,7 +26,7 @@ class UserController extends Controller
 
         $response = new JsonResponse([
             'data' => $this->transformCollection($users)
-        ], 404);
+        ], 200);
 
         $response->send();
     }
