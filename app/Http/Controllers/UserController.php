@@ -2,18 +2,30 @@
 
 namespace AlpogoApi\Http\Controllers;
 
+use AlpogoApi\Alpogo\Repositories\UserRepository;
+use AlpogoApi\Alpogo\Transformers\UserTransform;
 use AlpogoApi\Model\User\User;
-use AlpogoApi\Repositories\CollectionRepository;
-use AlpogoApi\Repositories\UserRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 
-class UserController extends Controller
+class UserController extends ApiController
 {
 
     use UserRepository;
-    use CollectionRepository;
+
+    /**
+     * @var UserTransform
+     */
+    private $userTransform;
+
+    /**
+     * UserController constructor.
+     * @param UserTransform $userTransform
+     */
+    public function __construct(UserTransform $userTransform)
+    {
+        $this->userTransform = $userTransform;
+    }
 
     /**
      * Display a listing of the resource.
@@ -25,7 +37,7 @@ class UserController extends Controller
         $users = User::all();
 
         $response = new JsonResponse([
-            'data' => $this->transformCollection($users)
+            'data' => $this->userTransform->transformCollection($users)
         ], 200);
 
         $response->send();
@@ -69,16 +81,15 @@ class UserController extends Controller
     {
         $user = User::find($id);
 
-        $userExits = $this->verifyIfUserExists($user);
+        //$userExits = $this->verifyIfUserExists($user);
+        if( ! $user )
+            return $this->errorResponses->pageNotFount();
 
-        if($userExits)
-            return $userExits['response'];
-
-        $response = new JsonResponse([
-            'data' => $this->transform($user->toArray())
+        /*$response = new JsonResponse([
+            'data' => $this->userTransform->transform($user->toArray())
         ], 200);
 
-        return $response;
+        return $response;*/
     }
 
     /**

@@ -1,24 +1,20 @@
 <?php
 
-namespace AlpogoApi\Repositories;
+namespace AlpogoApi\Alpogo\Transformers;
 
-Trait CollectionRepository
+/**
+ * Created by PhpStorm.
+ * User: aflores
+ * Date: 04/01/17
+ * Time: 10:58
+ */
+class UserTransform extends Transformer
 {
-
-    /**
-     * @param $users
-     * @return array
-     */
-    private function transformCollection($users)
-    {
-        return array_map([$this, 'transform'], $users->toArray());
-    }
-
     /**
      * @param $user
      * @return array
      */
-    private function transform($user)
+    public function transform($user)
     {
         return [
             'first_name' => $user['first_name'],
