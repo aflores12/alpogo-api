@@ -48,9 +48,22 @@ class UserController extends ApiController
     }
 
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @SWG\Get(
+     *     path="/users/",
+     *     description="Returns list of users",
+     *     produces={
+     *         "application/json",
+     *     },
+     *     @SWG\Response(
+     *         response=200,
+     *         description="users response"
+     *     ),
+     *     @SWG\Response(
+     *         response="default",
+     *         description="unexpected error",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *     )
+     * )
      */
     public function index()
     {
@@ -63,12 +76,6 @@ class UserController extends ApiController
         $response->send();
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
 
@@ -92,10 +99,21 @@ class UserController extends ApiController
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @SWG\Get(
+     *     path="/users/",
+     *     description="Returns list of users",
+     *     produces={
+     *         "application/json",
+     *     },
+     *     @SWG\Response(
+     *         response=200,
+     *         description="users response"
+     *     ),
+     *     @SWG\Response(
+     *         response="default",
+     *         description="unexpected error",
+     *     )
+     * )
      */
     public function show($id)
     {

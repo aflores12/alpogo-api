@@ -15,4 +15,16 @@ use AlpogoApi\Alpogo\Transformers\UserTransform;
 class ApiController extends Controller
 {
 
+    /**
+     * @SWG\Swagger(
+     *   schemes={"http"},
+     *   host="localhost:8000",
+     *   basePath="/api/v1/",
+     *   @SWG\Info(
+     *     title="Alpogo API Documentation",
+     *     version="1.0.0"
+     *   )
+     * )
+     */
+
 }
