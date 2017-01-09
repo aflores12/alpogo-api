@@ -35,29 +35,6 @@ Trait UserRepository
     }
 
     /**
-     * Verifica si existe el usuario user
-     * @param $user
-     * @return bool|JsonResponse
-     */
-    public function verifyIfUserExists($user)
-    {
-
-        if ( ! $user)
-        {
-            $response =  new JsonResponse([
-                'error' => [
-                    'message' => 'User does not exist'
-                ]
-            ], 404);
-
-            return ['response' => $response];
-        }
-
-        return false;
-
-    }
-
-    /**
      * Encripta y guarda el password del usuario
      * @param $user
      * @param $request

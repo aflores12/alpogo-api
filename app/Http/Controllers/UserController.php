@@ -3,6 +3,8 @@
 namespace AlpogoApi\Http\Controllers;
 
 use AlpogoApi\Alpogo\Repositories\UserRepository;
+use AlpogoApi\Alpogo\Responses\Errors\ErrorResponses;
+use AlpogoApi\Alpogo\Responses\Success\SuccessResponses;
 use AlpogoApi\Alpogo\Transformers\UserTransform;
 use AlpogoApi\Model\User\User;
 use Illuminate\Http\JsonResponse;
@@ -19,11 +21,29 @@ class UserController extends ApiController
     private $userTransform;
 
     /**
+     * @var ErrorResponses
+     */
+    private $errorResponses;
+
+    /**
+     * @var SuccessResponses
+     */
+    private $successResponses;
+
+    /**
      * UserController constructor.
      * @param UserTransform $userTransform
+     * @param ErrorResponses $errorResponses
+     * @param SuccessResponses $successResponses
      */
-    public function __construct(UserTransform $userTransform)
+    public function __construct(
+        UserTransform $userTransform,
+        ErrorResponses $errorResponses,
+        SuccessResponses $successResponses
+    )
     {
+        $this->successResponses = $successResponses;
+        $this->errorResponses = $errorResponses;
         $this->userTransform = $userTransform;
     }
 
@@ -81,15 +101,16 @@ class UserController extends ApiController
     {
         $user = User::find($id);
 
-        //$userExits = $this->verifyIfUserExists($user);
         if( ! $user )
             return $this->errorResponses->pageNotFount();
 
-        /*$response = new JsonResponse([
-            'data' => $this->userTransform->transform($user->toArray())
-        ], 200);
+        $response = $this->successResponses->respond(
+            [
+                'data' => $this->userTransform->transform($user->toArray())
+            ]
+        );
 
-        return $response;*/
+        return $response;
     }
 
     /**
@@ -123,17 +144,8 @@ class UserController extends ApiController
     {
         $user = User::find($id);
 
-        /**
-         * Verfiicar si existe el usuario
-         */
-        $userExits = $this->verifyIfUserExists($user);
-
-
-        /**
-         * Si el usuario no existe, retornar una jsonResponse
-         */
-        if($userExits)
-            return $userExits['response'];
+        if( ! $user )
+            $this->errorResponses->pageNotFount();
 
         $response = new JsonResponse([
             'data' => $user->roles->toArray()

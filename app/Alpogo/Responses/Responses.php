@@ -1,6 +1,7 @@
 <?php
 
 namespace AlpogoApi\Alpogo\Responses;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -11,7 +12,7 @@ use Illuminate\Http\JsonResponse;
  */
 abstract class Responses
 {
-    protected $statusCode;
+    protected $statusCode = 200;
 
     /**
      * @return mixed
@@ -32,6 +33,20 @@ abstract class Responses
     }
 
     /**
+     * @param $data
+     * @param array $other
+     * @return JsonResponse
+     */
+    public function respond($data, $other = [])
+    {
+        $response =  new JsonResponse([
+            $data, $other
+        ], $this->getStatusCode());
+
+        return $response;
+    }
+
+    /**
      * @param $message
      * @return JsonResponse
      */
@@ -39,9 +54,10 @@ abstract class Responses
     {
         $response =  new JsonResponse([
             'error' => [
-                'message' => $message
+                'message' => $message,
+                'code' => $this->getStatusCode()
             ]
-        ], $this->statusCode);
+        ], $this->getStatusCode());
 
         return $response;
     }

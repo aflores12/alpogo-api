@@ -10,16 +10,9 @@ namespace AlpogoApi\Http\Controllers;
 
 
 use AlpogoApi\Alpogo\Responses\Errors\ErrorResponses;
-use Illuminate\Http\JsonResponse;
+use AlpogoApi\Alpogo\Transformers\UserTransform;
 
 class ApiController extends Controller
 {
-
-    protected $errorResponses;
-
-    public function __construct(ErrorResponses $errorResponses)
-    {
-        $this->errorResponses = $errorResponses;
-    }
 
 }
