@@ -18,7 +18,7 @@ class ApiController extends Controller
     /**
      * @SWG\Swagger(
      *   schemes={"http"},
-     *   host="http://aflores.com.ar",
+     *   host="aflores.com.ar",
      *   basePath="/api/v1/",
      *   @SWG\Info(
      *     title="Alpogo API Documentation",

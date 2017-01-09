@@ -97,24 +97,7 @@ class UserController extends ApiController
 
         return $response;
     }
-
-    /**
-     * @SWG\Get(
-     *     path="/users/",
-     *     description="Returns list of users",
-     *     produces={
-     *         "application/json",
-     *     },
-     *     @SWG\Response(
-     *         response=200,
-     *         description="users response"
-     *     ),
-     *     @SWG\Response(
-     *         response="default",
-     *         description="unexpected error",
-     *     )
-     * )
-     */
+    
     public function show($id)
     {
         $user = User::find($id);
