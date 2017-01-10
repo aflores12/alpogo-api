@@ -20,9 +20,21 @@ class ErrorResponses extends Responses
         return $this->setStatusCode(404)->respondWithError('Page not found.');
     }
 
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function userNotFound()
     {
         return $this->setStatusCode(400)->respondWithError('Invalid id supplied.');
+    }
+
+    /**
+     * @param $data
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function requiredParameters($data)
+    {
+        return $this->setStatusCode(400)->respondWithValidator($data);
     }
 
 }

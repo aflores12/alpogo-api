@@ -50,6 +50,7 @@ class UserController extends ApiController
     /**
      * @SWG\Get(
      *     path="/users/",
+     *     tags={"users"},
      *     summary="Lista de usuarios",
      *     description="Retorna la lista de usuarios",
      *     produces={
@@ -74,28 +75,25 @@ class UserController extends ApiController
 
     /**
      * @SWG\Post(
-     *     path="/users/",
-     *     summary="registrar usuario",
-     *     description="Registra un usuario",
-     *     produces={
-     *         "application/json"
-     *     },
+     *     path="/users",
+     *     tags={"users"},
+     *     operationId="post_user",
+     *     summary="Registrar usuario",
+     *     description="",
+     *     consumes={"application/json", "application/xml"},
+     *     produces={"application/xml", "application/json"},
      *     @SWG\Parameter(
-     *         name="data",
+     *         name="body",
      *         in="body",
-     *         description="JSON data",
-     *         type="json",
+     *         description="",
      *         required=true,
-     *         @SWG\Schema(
-     *
-     *         )
+     *         @SWG\Schema(ref="#/definitions/User"),
      *     ),
      *     @SWG\Response(
-     *         response=200,
-     *         description="OK"
+     *         response=400,
+     *         description="Invalid input",
      *     )
      * )
-     *
      */
     public function store(Request $request)
     {
@@ -103,18 +101,14 @@ class UserController extends ApiController
         $validator = $this->validateUser($request);
 
         if ($validator->fails())
-            return new JsonResponse([
-                'data' => $validator->messages()
-            ], 400);
+            return $this->errorResponses->requiredParameters($validator->messages());
 
-        $user = User::create($request->all());
-
-        $this->storePassword($user,$request);
+        $user = User::create($request->all())->storePassword($request);
 
         $response = new JsonResponse([
-            'data' => 'User create successfully',
+            'message' => 'User create successfully',
             'user' => $user
-        ], 200);
+        ], 201);
 
         return $response;
     }
@@ -122,6 +116,7 @@ class UserController extends ApiController
     /**
      * @SWG\Get(
      *     path="/users/{id}",
+     *     tags={"users"},
      *     summary="Detalle de usuario",
      *     description="Retorna el detalle de un usaurio",
      *     produces={

@@ -14,6 +14,48 @@ class User extends Authenticatable
     use Notifiable;
 
     /**
+     * @SWG\Property()
+     * @var string
+     */
+    public $first_name;
+
+    /**
+     * @SWG\Property()
+     * @var string
+     */
+    public $last_name;
+
+    /**
+     * @SWG\Property()
+     * @var string
+     */
+    public $email;
+
+    /**
+     * @SWG\Property()
+     * @var string
+     */
+    public $passport;
+
+    /**
+     * @SWG\Property()
+     * @var string
+     */
+    public $birthday;
+
+    /**
+     * @SWG\Property()
+     * @var string
+     */
+    public $password;
+
+    /**
+     * @SWG\Property()
+     * @var string
+     */
+    public $password_confirmation;
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array
@@ -53,6 +95,18 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    /**
+     * @param $request
+     * @return $this
+     */
+    public function storePassword($request)
+    {
+        $this->password = bcrypt($request->password);
+        $this->save();
+
+        return $this;
     }
 
 }

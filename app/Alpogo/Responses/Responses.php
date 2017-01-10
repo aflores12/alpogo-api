@@ -61,4 +61,17 @@ abstract class Responses
         return $response;
     }
 
+    /**
+     * @param $data
+     * @return JsonResponse
+     */
+    public function respondWithValidator($data)
+    {
+        $response =  new JsonResponse([
+            $data
+        ], $this->getStatusCode());
+
+        return $response;
+    }
+
 }
