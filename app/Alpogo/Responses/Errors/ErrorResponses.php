@@ -21,9 +21,14 @@ class ErrorResponses extends Responses
     }
 
     /**
-     * @return \Illuminate\Http\JsonResponse
+     * @return mixed
      */
     public function userNotFound()
+    {
+        return $this->setStatusCode(404)->respondWithError('User not found.');
+    }
+
+    public function invalidIdSupplied()
     {
         return $this->setStatusCode(400)->respondWithError('Invalid id supplied.');
     }

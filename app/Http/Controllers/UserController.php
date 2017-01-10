@@ -49,7 +49,7 @@ class UserController extends ApiController
 
     /**
      * @SWG\Get(
-     *     path="/users/",
+     *     path="/users",
      *     tags={"users"},
      *     summary="Lista de usuarios",
      *     description="Retorna la lista de usuarios",
@@ -78,7 +78,7 @@ class UserController extends ApiController
      *     path="/users",
      *     tags={"users"},
      *     operationId="post_user",
-     *     summary="Registrar usuario",
+     *     summary="Registra un usuario",
      *     description="",
      *     consumes={"application/json", "application/xml"},
      *     produces={"application/xml", "application/json"},
@@ -137,12 +137,20 @@ class UserController extends ApiController
      *         response="400",
      *         description="Invalid id supplied",
      *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *     ),
+     *     @SWG\Response(
+     *         response="404",
+     *         description="User not found",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
      *     )
      * )
      */
     public function show($id)
     {
         $user = User::find($id);
+
+        if( ! is_numeric($id))
+            return $this->errorResponses->invalidIdSupplied();
 
         if( ! $user )
             return $this->errorResponses->userNotFound();
@@ -155,26 +163,108 @@ class UserController extends ApiController
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @SWG\Put(
+     *     path="/users/{id}",
+     *     tags={"users"},
+     *     operationId="put_user",
+     *     summary="Edita un usuario",
+     *     description="",
+     *     consumes={"application/json", "application/xml"},
+     *     produces={"application/xml", "application/json"},
+     *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de un usuario",
+     *         type="integer",
+     *         required=true
+     *     ),
+     *     @SWG\Parameter(
+     *         name="body",
+     *         in="body",
+     *         description="",
+     *         @SWG\Schema(ref="#/definitions/User"),
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Invalid id supplied",
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="User not found",
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Updated succesfully",
+     *     )
+     * )
      */
     public function update(Request $request, $id)
     {
-        //
+        $user = User::find($id);
+
+        if( ! is_numeric($id))
+            return $this->errorResponses->invalidIdSupplied();
+
+        if( ! $user )
+            return $this->errorResponses->userNotFound();
+
+        $user->update($request->all());
+
+        $response = new JsonResponse([
+            'message' => 'User updated successfully',
+            'user' => $user
+        ], 200);
+
+        return $response;
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @SWG\Delete(
+     *     path="/users/{id}",
+     *     summary="Elimina un usuario",
+     *     description="",
+     *     operationId="delete_user",
+     *     produces={"application/xml", "application/json"},
+     *     tags={"users"},
+     *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de un usuario",
+     *         type="integer",
+     *         required=true
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Invalid ID supplied"
+     *     ),
+     *     @SWG\Response(
+     *         response=404,
+     *         description="User not found"
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="Deleted succesfully",
+     *     )
+     * )
      */
     public function destroy($id)
     {
-        //
+        $user = User::find($id);
+
+        if( ! is_numeric($id))
+            return $this->errorResponses->invalidIdSupplied();
+
+        if( ! $user )
+            return $this->errorResponses->userNotFound();
+
+        $user = User::destroy($id);
+
+        $response = new JsonResponse([
+            'message' => 'User deleted successfully'
+        ], 200);
+
+        return $response;
+
     }
 
     /**
