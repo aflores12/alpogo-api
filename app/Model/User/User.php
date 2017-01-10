@@ -6,6 +6,9 @@ use AlpogoApi\Model\User\Role;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * @SWG\Definition(required={"first_name", "last_name", "email", "passport", "birthday"}, type="object", @SWG\Xml(name="User"))
+ */
 class User extends Authenticatable
 {
     use Notifiable;

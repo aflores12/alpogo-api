@@ -50,18 +50,14 @@ class UserController extends ApiController
     /**
      * @SWG\Get(
      *     path="/users/",
-     *     description="Returns list of users",
+     *     summary="Lista de usuarios",
+     *     description="Retorna la lista de usuarios",
      *     produces={
      *         "application/json",
      *     },
      *     @SWG\Response(
      *         response=200,
-     *         description="users response"
-     *     ),
-     *     @SWG\Response(
-     *         response="default",
-     *         description="unexpected error",
-     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *         description="OK"
      *     )
      * )
      */
@@ -69,13 +65,38 @@ class UserController extends ApiController
     {
         $users = User::all();
 
-        $response = new JsonResponse([
-            'data' => $this->userTransform->transformCollection($users)
-        ], 200);
+        $response = $this->successResponses->respond(
+            $this->userTransform->transformCollection($users)
+        );
 
         $response->send();
     }
 
+    /**
+     * @SWG\Post(
+     *     path="/users/",
+     *     summary="registrar usuario",
+     *     description="Registra un usuario",
+     *     produces={
+     *         "application/json"
+     *     },
+     *     @SWG\Parameter(
+     *         name="data",
+     *         in="body",
+     *         description="JSON data",
+     *         type="json",
+     *         required=true,
+     *         @SWG\Schema(
+     *
+     *         )
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="OK"
+     *     )
+     * )
+     *
+     */
     public function store(Request $request)
     {
 
@@ -84,7 +105,7 @@ class UserController extends ApiController
         if ($validator->fails())
             return new JsonResponse([
                 'data' => $validator->messages()
-            ], 200);
+            ], 400);
 
         $user = User::create($request->all());
 
@@ -97,18 +118,42 @@ class UserController extends ApiController
 
         return $response;
     }
-    
+
+    /**
+     * @SWG\Get(
+     *     path="/users/{id}",
+     *     summary="Detalle de usuario",
+     *     description="Retorna el detalle de un usaurio",
+     *     produces={
+     *         "application/json",
+     *     },
+     *     @SWG\Parameter(
+     *         name="id",
+     *         in="path",
+     *         description="ID de un usuario",
+     *         type="integer",
+     *         required=true
+     *     ),
+     *     @SWG\Response(
+     *         response=200,
+     *         description="OK"
+     *     ),
+     *     @SWG\Response(
+     *         response="400",
+     *         description="Invalid id supplied",
+     *         @SWG\Schema(ref="#/definitions/ErrorModel")
+     *     )
+     * )
+     */
     public function show($id)
     {
         $user = User::find($id);
 
         if( ! $user )
-            return $this->errorResponses->pageNotFount();
+            return $this->errorResponses->userNotFound();
 
         $response = $this->successResponses->respond(
-            [
-                'data' => $this->userTransform->transform($user->toArray())
-            ]
+            $this->userTransform->transform($user->toArray())
         );
 
         return $response;
@@ -146,7 +191,7 @@ class UserController extends ApiController
         $user = User::find($id);
 
         if( ! $user )
-            $this->errorResponses->pageNotFount();
+            $this->errorResponses->pageNotFound();
 
         $response = new JsonResponse([
             'data' => $user->roles->toArray()

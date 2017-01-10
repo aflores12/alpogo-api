@@ -34,13 +34,12 @@ abstract class Responses
 
     /**
      * @param $data
-     * @param array $other
      * @return JsonResponse
      */
-    public function respond($data, $other = [])
+    public function respond($data)
     {
         $response =  new JsonResponse([
-            $data, $other
+            $data
         ], $this->getStatusCode());
 
         return $response;

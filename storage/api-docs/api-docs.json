@@ -4,7 +4,7 @@
         "title": "Alpogo API Documentation",
         "version": "1.0.0"
     },
-    "host": "aflores.com.ar",
+    "host": "localhost:8000",
     "basePath": "/api/v1/",
     "schemes": [
         "http"
@@ -12,16 +12,62 @@
     "paths": {
         "/users/": {
             "get": {
-                "description": "Returns list of users",
+                "summary": "Lista de usuarios",
+                "description": "Retorna la lista de usuarios",
                 "produces": [
                     "application/json"
                 ],
                 "responses": {
                     "200": {
-                        "description": "users response"
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "summary": "registrar usuario",
+                "description": "Registra un usuario",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "data",
+                        "in": "body",
+                        "description": "JSON data",
+                        "required": true,
+                        "schema": {},
+                        "type": "json"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/users/{id}": {
+            "get": {
+                "summary": "Detalle de usuario",
+                "description": "Retorna el detalle de un usaurio",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de un usuario",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
                     },
-                    "default": {
-                        "description": "unexpected error",
+                    "400": {
+                        "description": "Invalid id supplied",
                         "schema": {
                             "$ref": "#/definitions/ErrorModel"
                         }
@@ -30,5 +76,19 @@
             }
         }
     },
-    "definitions": {}
+    "definitions": {
+        "User": {
+            "required": [
+                "first_name",
+                "last_name",
+                "email",
+                "passport",
+                "birthday"
+            ],
+            "type": "object",
+            "xml": {
+                "name": "User"
+            }
+        }
+    }
 }
