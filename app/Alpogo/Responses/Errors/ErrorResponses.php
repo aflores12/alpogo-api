@@ -1,6 +1,8 @@
 <?php
 
 namespace AlpogoApi\Alpogo\Responses\Errors;
+
+use AlpogoApi\Alpogo\HTTP\HttpCodes;
 use AlpogoApi\Alpogo\Responses\Responses;
 
 /**
@@ -12,34 +14,29 @@ use AlpogoApi\Alpogo\Responses\Responses;
 class ErrorResponses extends Responses
 {
 
-    /**
-     * @return mixed
-     */
     public function pageNotFound()
     {
-        return $this->setStatusCode(404)->respondWithError('Page not found.');
+        return $this->setStatusCode(HttpCodes::PAGE_NOT_FOUND)->respondWithError('Page not found.');
     }
 
-    /**
-     * @return mixed
-     */
     public function userNotFound()
     {
-        return $this->setStatusCode(404)->respondWithError('User not found.');
+        return $this->setStatusCode(HttpCodes::USER_NOT_FOUND)->respondWithError('User not found.');
     }
 
     public function invalidIdSupplied()
     {
-        return $this->setStatusCode(400)->respondWithError('Invalid id supplied.');
+        return $this->setStatusCode(HttpCodes::INVALID_ID)->respondWithError('Invalid id supplied.');
     }
 
-    /**
-     * @param $data
-     * @return \Illuminate\Http\JsonResponse
-     */
+    public function roleNotFound()
+    {
+        return $this->setStatusCode(HttpCodes::ROLE_NOT_FOUND)->respondWithError('Role not found.');
+    }
+
     public function requiredParameters($data)
     {
-        return $this->setStatusCode(400)->respondWithValidator($data);
+        return $this->setStatusCode(HttpCodes::INVALID_INPUT)->respondWithValidator($data);
     }
 
 }

@@ -15,7 +15,9 @@ use Illuminate\Http\Request;
 
 Route::resource('users', 'UserController');
 
-Route::get('users/{id}/roles', 'UserController@roles');
+Route::get('users/{id}/roles', 'RoleController@show');
+Route::post('users/{id}/roles/attach', 'RoleController@attach');
+Route::post('users/{id}/roles/detach', 'RoleController@detach');
 Route::get('users/{id}/roles/permissions', 'UserController@permissions');
 
 /*Route::get('/user', function (Request $request) {

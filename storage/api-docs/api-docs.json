@@ -10,6 +10,160 @@
         "http"
     ],
     "paths": {
+        "/users/{id}/roles": {
+            "get": {
+                "tags": [
+                    "users/roles"
+                ],
+                "summary": "Detalle de roles de usuario",
+                "description": "Retorna los roles de un usuario",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de un usuario",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Invalid id",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "402": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}/roles/attach": {
+            "post": {
+                "tags": [
+                    "users/roles"
+                ],
+                "summary": "A\u00f1ade un rol al usuario",
+                "description": "",
+                "operationId": "attach_role_user",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de un usuario",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "slug": {
+                                    "type": "string",
+                                    "default": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Invalid id"
+                    },
+                    "402": {
+                        "description": "User not found"
+                    },
+                    "403": {
+                        "description": "Role not found"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/users/{id}/roles/detach": {
+            "post": {
+                "tags": [
+                    "users/roles"
+                ],
+                "summary": "Sustrae un rol al usuario",
+                "description": "",
+                "operationId": "detach_role_user",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de un usuario",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "properties": {
+                                "slug": {
+                                    "type": "string",
+                                    "default": "string"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Invalid id"
+                    },
+                    "402": {
+                        "description": "User not found"
+                    },
+                    "403": {
+                        "description": "Role not found"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/users": {
             "get": {
                 "tags": [
@@ -55,6 +209,9 @@
                 "responses": {
                     "400": {
                         "description": "Invalid input"
+                    },
+                    "201": {
+                        "description": "Create successfully"
                     }
                 }
             }
@@ -82,13 +239,13 @@
                     "200": {
                         "description": "OK"
                     },
-                    "400": {
+                    "401": {
                         "description": "Invalid id supplied",
                         "schema": {
                             "$ref": "#/definitions/ErrorModel"
                         }
                     },
-                    "404": {
+                    "402": {
                         "description": "User not found",
                         "schema": {
                             "$ref": "#/definitions/ErrorModel"
@@ -129,14 +286,14 @@
                     }
                 ],
                 "responses": {
-                    "400": {
+                    "401": {
                         "description": "Invalid id supplied"
                     },
-                    "404": {
+                    "402": {
                         "description": "User not found"
                     },
                     "200": {
-                        "description": "Updated succesfully"
+                        "description": "OK"
                     }
                 }
             },
@@ -161,14 +318,14 @@
                     }
                 ],
                 "responses": {
-                    "400": {
+                    "401": {
                         "description": "Invalid ID supplied"
                     },
-                    "404": {
+                    "402": {
                         "description": "User not found"
                     },
                     "200": {
-                        "description": "Deleted succesfully"
+                        "description": "OK"
                     }
                 }
             }

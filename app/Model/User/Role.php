@@ -11,11 +11,17 @@ class Role extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'name', 'description'
+        'name', 'description', 'slug', 'id'
     ];
 
     public function permissions()
     {
         return $this->belongsToMany(Permission::class);
     }
+
+    public function findForSlug($slug)
+    {
+        return Role::where('slug', $slug)->first();
+    }
+
 }

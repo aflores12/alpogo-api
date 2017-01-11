@@ -12,7 +12,7 @@ Trait UserRepository
      * Reglas de validación
      * @var array
      */
-    private $rules = [
+    private $userRules = [
         'first_name' => 'required',
         'last_name' => 'required',
         'email' => 'required|unique:users',
@@ -28,7 +28,7 @@ Trait UserRepository
     public function validateUser($request)
     {
         $validator = Validator::make($request->all(),
-            $this->rules
+            $this->userRules
         );
 
         return $validator;

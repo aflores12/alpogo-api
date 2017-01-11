@@ -1,6 +1,7 @@
 <?php
 
 namespace AlpogoApi\Alpogo\Responses;
+use AlpogoApi\Alpogo\HTTP\HttpCodes;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 
@@ -12,7 +13,8 @@ use Illuminate\Http\JsonResponse;
  */
 abstract class Responses
 {
-    protected $statusCode = 200;
+
+    protected $statusCode = HttpCodes::OK;
 
     /**
      * @return mixed

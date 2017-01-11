@@ -2,10 +2,13 @@
 
 namespace AlpogoApi\Http\Controllers;
 
+use AlpogoApi\Alpogo\HTTP\HttpCodes;
+use AlpogoApi\Alpogo\Repositories\RoleRepository;
 use AlpogoApi\Alpogo\Repositories\UserRepository;
 use AlpogoApi\Alpogo\Responses\Errors\ErrorResponses;
 use AlpogoApi\Alpogo\Responses\Success\SuccessResponses;
 use AlpogoApi\Alpogo\Transformers\UserTransform;
+use AlpogoApi\Model\User\Role;
 use AlpogoApi\Model\User\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -92,6 +95,10 @@ class UserController extends ApiController
      *     @SWG\Response(
      *         response=400,
      *         description="Invalid input",
+     *     ),
+     *     @SWG\Response(
+     *         response=201,
+     *         description="Create successfully",
      *     )
      * )
      */
@@ -108,7 +115,7 @@ class UserController extends ApiController
         $response = new JsonResponse([
             'message' => 'User create successfully',
             'user' => $user
-        ], 201);
+        ], HttpCodes::CREATE);
 
         return $response;
     }
@@ -134,12 +141,12 @@ class UserController extends ApiController
      *         description="OK"
      *     ),
      *     @SWG\Response(
-     *         response="400",
+     *         response="401",
      *         description="Invalid id supplied",
      *         @SWG\Schema(ref="#/definitions/ErrorModel")
      *     ),
      *     @SWG\Response(
-     *         response="404",
+     *         response="402",
      *         description="User not found",
      *         @SWG\Schema(ref="#/definitions/ErrorModel")
      *     )
@@ -185,16 +192,16 @@ class UserController extends ApiController
      *         @SWG\Schema(ref="#/definitions/User"),
      *     ),
      *     @SWG\Response(
-     *         response=400,
+     *         response=401,
      *         description="Invalid id supplied",
      *     ),
      *     @SWG\Response(
-     *         response=404,
+     *         response=402,
      *         description="User not found",
      *     ),
      *     @SWG\Response(
      *         response=200,
-     *         description="Updated succesfully",
+     *         description="OK",
      *     )
      * )
      */
@@ -213,7 +220,7 @@ class UserController extends ApiController
         $response = new JsonResponse([
             'message' => 'User updated successfully',
             'user' => $user
-        ], 200);
+        ], HttpCodes::OK);
 
         return $response;
     }
@@ -234,16 +241,16 @@ class UserController extends ApiController
      *         required=true
      *     ),
      *     @SWG\Response(
-     *         response=400,
+     *         response=401,
      *         description="Invalid ID supplied"
      *     ),
      *     @SWG\Response(
-     *         response=404,
+     *         response=402,
      *         description="User not found"
      *     ),
      *     @SWG\Response(
      *         response=200,
-     *         description="Deleted succesfully",
+     *         description="OK",
      *     )
      * )
      */
@@ -257,30 +264,11 @@ class UserController extends ApiController
         if( ! $user )
             return $this->errorResponses->userNotFound();
 
-        $user = User::destroy($id);
+        User::destroy($id);
 
         $response = new JsonResponse([
             'message' => 'User deleted successfully'
-        ], 200);
-
-        return $response;
-
-    }
-
-    /**
-     * @param $id
-     * @return JsonResponse
-     */
-    public function roles($id)
-    {
-        $user = User::find($id);
-
-        if( ! $user )
-            $this->errorResponses->pageNotFound();
-
-        $response = new JsonResponse([
-            'data' => $user->roles->toArray()
-        ], 200);
+        ], HttpCodes::OK);
 
         return $response;
 
