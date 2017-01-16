@@ -2,7 +2,7 @@
 
 namespace AlpogoApi\Model\User;
 
-use AlpogoApi\Model\User\Role;
+use AlpogoApi\Model\Artist;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -86,7 +86,12 @@ class User extends Authenticatable
             $user->last_login = date('Y/m/d');
         });
 
+        static::deleting(function ($user) {
+            $user->artist()->delete();
+            $user->roles()->delete();
+        });
     }
+    
 
     /**
      * Retorna los roles a los que pertenece el usuario
@@ -95,6 +100,15 @@ class User extends Authenticatable
     public function roles()
     {
         return $this->belongsToMany(Role::class);
+    }
+
+    /**
+     * Retorna el artista asociado al usuario
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function artist()
+    {
+        return $this->hasOne(Artist::class);
     }
 
     /**

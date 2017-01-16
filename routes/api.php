@@ -15,10 +15,15 @@ use Illuminate\Http\Request;
 
 Route::resource('users', 'UserController');
 
+Route::get('roles', 'RoleController@index');
 Route::get('users/{id}/roles', 'RoleController@show');
-Route::post('users/{id}/roles/attach', 'RoleController@attach');
-Route::post('users/{id}/roles/detach', 'RoleController@detach');
-Route::get('users/{id}/roles/permissions', 'UserController@permissions');
+Route::post('users/{id}/roles/', 'RoleController@attach');
+Route::delete('users/{id}/roles/{slug}', 'RoleController@detach');
+
+Route::get('artists', 'ArtistController@index');
+Route::get('users/{id}/artist', 'ArtistController@show');
+Route::post('users/{id}/artist', 'ArtistController@attach');
+Route::delete('users/{id}/artist', 'ArtistController@detach');
 
 /*Route::get('/user', function (Request $request) {
     return $request->user();

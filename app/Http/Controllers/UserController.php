@@ -24,29 +24,12 @@ class UserController extends ApiController
     private $userTransform;
 
     /**
-     * @var ErrorResponses
-     */
-    private $errorResponses;
-
-    /**
-     * @var SuccessResponses
-     */
-    private $successResponses;
-
-    /**
      * UserController constructor.
      * @param UserTransform $userTransform
-     * @param ErrorResponses $errorResponses
-     * @param SuccessResponses $successResponses
      */
-    public function __construct(
-        UserTransform $userTransform,
-        ErrorResponses $errorResponses,
-        SuccessResponses $successResponses
-    )
+    public function __construct(UserTransform $userTransform)
     {
-        $this->successResponses = $successResponses;
-        $this->errorResponses = $errorResponses;
+        parent::__construct();
         $this->userTransform = $userTransform;
     }
 

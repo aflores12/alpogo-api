@@ -4,16 +4,180 @@
         "title": "Alpogo API Documentation",
         "version": "1.0.0"
     },
-    "host": "aflores.com.ar",
+    "host": "localhost:8000",
     "basePath": "/api/v1/",
     "schemes": [
         "http"
     ],
     "paths": {
+        "/artists": {
+            "get": {
+                "tags": [
+                    "artists"
+                ],
+                "summary": "Lista de artistas",
+                "description": "Retorna la lista de artistas",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/users/{id}/artist": {
+            "get": {
+                "tags": [
+                    "artists"
+                ],
+                "summary": "Detalle de artista de usuario",
+                "description": "Retorna el artista de un usuario",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de un usuario",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "401": {
+                        "description": "Invalid id",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    },
+                    "402": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorModel"
+                        }
+                    }
+                }
+            }
+        },
+        "/users/{id}/artist/": {
+            "post": {
+                "tags": [
+                    "artists"
+                ],
+                "summary": "A\u00f1ade un artista al usuario",
+                "description": "",
+                "operationId": "attach_artist_user",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de un usuario",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Artist"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "401": {
+                        "description": "Invalid id"
+                    },
+                    "402": {
+                        "description": "User not found"
+                    },
+                    "410": {
+                        "description": "User already has an artist."
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "artists"
+                ],
+                "summary": "Sustrae un artista al usuario",
+                "description": "",
+                "operationId": "detach_artist_user",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID de un usuario",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "401": {
+                        "description": "Invalid id"
+                    },
+                    "402": {
+                        "description": "User not found"
+                    },
+                    "406": {
+                        "description": "Artist not found"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/roles": {
+            "get": {
+                "tags": [
+                    "roles"
+                ],
+                "summary": "Lista de roles",
+                "description": "Retorna la lista de roles",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/users/{id}/roles": {
             "get": {
                 "tags": [
-                    "users/roles"
+                    "roles"
                 ],
                 "summary": "Detalle de roles de usuario",
                 "description": "Retorna los roles de un usuario",
@@ -48,10 +212,10 @@
                 }
             }
         },
-        "/users/{id}/roles/attach": {
+        "/users/{id}/roles/": {
             "post": {
                 "tags": [
-                    "users/roles"
+                    "roles"
                 ],
                 "summary": "A\u00f1ade un rol al usuario",
                 "description": "",
@@ -106,10 +270,10 @@
                 }
             }
         },
-        "/users/{id}/roles/detach": {
-            "post": {
+        "/users/{id}/roles/{slug}": {
+            "delete": {
                 "tags": [
-                    "users/roles"
+                    "roles"
                 ],
                 "summary": "Sustrae un rol al usuario",
                 "description": "",
@@ -131,24 +295,14 @@
                         "type": "integer"
                     },
                     {
-                        "name": "body",
-                        "in": "body",
-                        "description": "",
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug de un rol",
                         "required": true,
-                        "schema": {
-                            "properties": {
-                                "slug": {
-                                    "type": "string",
-                                    "default": "string"
-                                }
-                            }
-                        }
+                        "type": "string"
                     }
                 ],
                 "responses": {
-                    "400": {
-                        "description": "Invalid input"
-                    },
                     "401": {
                         "description": "Invalid id"
                     },
@@ -332,6 +486,49 @@
         }
     },
     "definitions": {
+        "Artist": {
+            "required": [
+                "name",
+                "location",
+                "description",
+                "avatar",
+                "imagen_head",
+                "imagen_principal"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "location": {
+                    "type": "string"
+                },
+                "website": {
+                    "type": "string"
+                },
+                "widget": {
+                    "type": "string"
+                },
+                "social": {
+                    "type": "string"
+                },
+                "avatar": {
+                    "type": "string"
+                },
+                "imagen_head": {
+                    "type": "string"
+                },
+                "imagen_principal": {
+                    "type": "string"
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Artist"
+            }
+        },
         "User": {
             "required": [
                 "first_name",

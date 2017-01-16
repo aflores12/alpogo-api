@@ -24,19 +24,31 @@ class ErrorResponses extends Responses
         return $this->setStatusCode(HttpCodes::USER_NOT_FOUND)->respondWithError('User not found.');
     }
 
-    public function invalidIdSupplied()
-    {
-        return $this->setStatusCode(HttpCodes::INVALID_ID)->respondWithError('Invalid id supplied.');
-    }
-
     public function roleNotFound()
     {
         return $this->setStatusCode(HttpCodes::ROLE_NOT_FOUND)->respondWithError('Role not found.');
     }
 
+    public function artistNotFound()
+    {
+        return $this->setStatusCode(HttpCodes::ARTIST_NOT_FOUND)->respondWithError('Artist not found.');
+    }
+
+    public function invalidIdSupplied()
+    {
+        return $this->setStatusCode(HttpCodes::INVALID_ID)->respondWithError('Invalid id supplied.');
+    }
+
+
+
     public function requiredParameters($data)
     {
         return $this->setStatusCode(HttpCodes::INVALID_INPUT)->respondWithValidator($data);
+    }
+
+    public function userHasAnArtist()
+    {
+        return $this->setStatusCode(HttpCodes::ALREADY_HAS)->respondWithError('User already has an artist.');
     }
 
 }

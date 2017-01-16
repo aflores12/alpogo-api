@@ -1,31 +1,17 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: aflores
- * Date: 11/01/17
- * Time: 12:15
- */
 
 namespace AlpogoApi\Http\Controllers;
 
-
-use AlpogoApi\Alpogo\HTTP\HttpCodes;
-use AlpogoApi\Alpogo\Repositories\RoleRepository;
-use AlpogoApi\Alpogo\Responses\Errors\ErrorResponses;
-use AlpogoApi\Alpogo\Responses\Success\SuccessResponses;
-use AlpogoApi\Model\User\Role;
+use AlpogoApi\Alpogo\Repositories\ArtistRepository;
+use AlpogoApi\Model\Artist;
 use AlpogoApi\Model\User\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-class RoleController extends ApiController
+class ArtistController extends ApiController
 {
 
-    use RoleRepository;
+    use ArtistRepository;
 
-    /**
-     * RoleController constructor.
-     */
     public function __construct()
     {
         parent::__construct();
@@ -33,10 +19,10 @@ class RoleController extends ApiController
 
     /**
      * @SWG\Get(
-     *     path="/roles",
-     *     tags={"roles"},
-     *     summary="Lista de roles",
-     *     description="Retorna la lista de roles",
+     *     path="/artists",
+     *     tags={"artists"},
+     *     summary="Lista de artistas",
+     *     description="Retorna la lista de artistas",
      *     produces={
      *         "application/json",
      *     },
@@ -48,10 +34,10 @@ class RoleController extends ApiController
      */
     public function index()
     {
-        $roles = Role::all();
+        $artists = Artist::all();
 
         $response = $this->successResponses->respond(
-            $roles
+            $artists
         );
 
         $response->send();
@@ -59,10 +45,10 @@ class RoleController extends ApiController
 
     /**
      * @SWG\Get(
-     *     path="/users/{id}/roles",
-     *     tags={"roles"},
-     *     summary="Detalle de roles de usuario",
-     *     description="Retorna los roles de un usuario",
+     *     path="/users/{id}/artist",
+     *     tags={"artists"},
+     *     summary="Detalle de artista de usuario",
+     *     description="Retorna el artista de un usuario",
      *     produces={
      *         "application/json",
      *     },
@@ -99,20 +85,17 @@ class RoleController extends ApiController
         if( ! $user )
             return $this->errorResponses->userNotFound();
 
-        $response = new JsonResponse([
-            $user->roles->toArray()
-        ], HttpCodes::OK);
+        $response = $this->successResponses->respond($user->artist->toArray());
 
         return $response;
-
     }
 
     /**
      * @SWG\Post(
-     *     path="/users/{id}/roles/",
-     *     tags={"roles"},
-     *     operationId="attach_role_user",
-     *     summary="Añade un rol al usuario",
+     *     path="/users/{id}/artist/",
+     *     tags={"artists"},
+     *     operationId="attach_artist_user",
+     *     summary="Añade un artista al usuario",
      *     description="",
      *     consumes={"application/json", "application/xml"},
      *     produces={"application/xml", "application/json"},
@@ -121,20 +104,14 @@ class RoleController extends ApiController
      *         in="path",
      *         description="ID de un usuario",
      *         type="integer",
-     *         required=true
+     *         required=true,
      *     ),
      *     @SWG\Parameter(
      *         name="body",
      *         in="body",
      *         description="",
      *         required=true,
-     *         @SWG\Schema(
-     *             @SWG\Property(
-     *                 property="slug",
-     *                 type="string",
-     *                 default="string"
-     *             ),
-     *         ),
+     *         @SWG\Schema(ref="#/definitions/Artist")
      *     ),
      *     @SWG\Response(
      *         response=400,
@@ -149,8 +126,8 @@ class RoleController extends ApiController
      *         description="User not found",
      *     ),
      *     @SWG\Response(
-     *         response=403,
-     *         description="Role not found",
+     *         response=410,
+     *         description="User already has an artist.",
      *     ),
      *     @SWG\Response(
      *         response=200,
@@ -161,7 +138,7 @@ class RoleController extends ApiController
     public function attach(Request $request, $id)
     {
 
-        $validator = $this->validateRole($request);
+        $validator = $this->validateArtist($request);
 
         if ($validator->fails())
             return $this->errorResponses->requiredParameters($validator->messages());
@@ -171,19 +148,17 @@ class RoleController extends ApiController
 
         $user = User::find($id);
 
-        $role = Role::where('slug', $request->slug)->first();
-
         if( ! $user )
             return $this->errorResponses->userNotFound();
 
-        if( ! $role )
-            return $this->errorResponses->RoleNotFound();
+        if( count($user->artist) > 0 )
+            return $this->errorResponses->userHasAnArtist();
 
-        $user->roles()->attach($role->id);
+        $artist = Artist::create($request->all());
 
-        $response = new JsonResponse([
-            'Role attached successfully.'
-        ], HttpCodes::OK);
+        $user->artist()->attach($artist);
+
+        $response = $this->successResponses->respondSuccess('Artist created successfully.');
 
         return $response;
 
@@ -191,10 +166,10 @@ class RoleController extends ApiController
 
     /**
      * @SWG\Delete(
-     *     path="/users/{id}/roles/{slug}",
-     *     tags={"roles"},
-     *     operationId="detach_role_user",
-     *     summary="Sustrae un rol al usuario",
+     *     path="/users/{id}/artist/",
+     *     tags={"artists"},
+     *     operationId="detach_artist_user",
+     *     summary="Sustrae un artista al usuario",
      *     description="",
      *     consumes={"application/json", "application/xml"},
      *     produces={"application/xml", "application/json"},
@@ -203,13 +178,6 @@ class RoleController extends ApiController
      *         in="path",
      *         description="ID de un usuario",
      *         type="integer",
-     *         required=true
-     *     ),
-     *     @SWG\Parameter(
-     *         name="slug",
-     *         in="path",
-     *         description="Slug de un rol",
-     *         type="string",
      *         required=true
      *     ),
      *     @SWG\Response(
@@ -221,8 +189,8 @@ class RoleController extends ApiController
      *         description="User not found",
      *     ),
      *     @SWG\Response(
-     *         response=403,
-     *         description="Role not found",
+     *         response=406,
+     *         description="Artist not found",
      *     ),
      *     @SWG\Response(
      *         response=200,
@@ -230,27 +198,25 @@ class RoleController extends ApiController
      *     )
      * )
      */
-    public function detach($id, $slug)
+    public function detach($id)
     {
 
         if( ! is_numeric($id))
             return $this->errorResponses->invalidIdSupplied();
 
         $user = User::find($id);
-        $role = Role::where('slug', $slug)->first();
 
         if( ! $user )
             return $this->errorResponses->userNotFound();
 
-        if( ! $role )
-            return $this->errorResponses->RoleNotFound();
+        if( ! $user->artist )
+            return $this->errorResponses->ArtistNotFound();
 
-        $user->roles()->detach($role->id);
+        $user->artist()->delete();
 
-        $response = new JsonResponse([
-            'Role detached successfully.'
-        ], HttpCodes::OK);
+        $response = $this->successResponses->respondSuccess('Artist detached successfully.');
 
         return $response;
     }
+
 }

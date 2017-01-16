@@ -25,4 +25,8 @@ abstract class HttpCodes
 
     const PAGE_NOT_FOUND = 404;
 
+    const ALREADY_HAS = 405;
+
+    const ARTIST_NOT_FOUND = 406;
+
 }
