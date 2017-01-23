@@ -36,10 +36,13 @@ class ErrorResponses extends Responses
 
     public function invalidIdSupplied()
     {
-        return $this->setStatusCode(HttpCodes::INVALID_ID)->respondWithError('Invalid id supplied.');
+        return $this->setStatusCode(HttpCodes::INVALID_INPUT)->respondWithError('Invalid id supplied.');
     }
 
-
+    public function failLogin()
+    {
+        return $this->setStatusCode(HttpCodes::INVALID_INPUT)->respondWithError('Invalid email or password.');
+    }
 
     public function requiredParameters($data)
     {

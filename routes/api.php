@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 */
 
 Route::resource('users', 'UserController');
+Route::post('users/login', 'Auth\AuthController@login');
 
 Route::get('roles', 'RoleController@index');
 Route::get('users/{id}/roles', 'RoleController@show');

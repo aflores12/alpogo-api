@@ -34,15 +34,5 @@ Trait UserRepository
         return $validator;
     }
 
-    /**
-     * Encripta y guarda el password del usuario
-     * @param $user
-     * @param $request
-     */
-    public function storePassword($user, $request)
-    {
-        $user->password = bcrypt($request->password);
-        $user->save();
-    }
 
 }

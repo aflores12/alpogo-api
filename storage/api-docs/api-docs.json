@@ -157,6 +157,59 @@
                 }
             }
         },
+        "/users/login": {
+            "post": {
+                "tags": [
+                    "users"
+                ],
+                "summary": "Logs user into the system",
+                "description": "",
+                "operationId": "loginUser",
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "formData",
+                        "description": "The user email for login",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "formData",
+                        "description": "The password for login in clear text",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "successful operation",
+                        "schema": {
+                            "type": "string"
+                        },
+                        "headers": {
+                            "X-Rate-Limit": {
+                                "description": "calls per hour allowed by the user",
+                                "type": "integer",
+                                "format": "int32"
+                            },
+                            "X-Expires-After": {
+                                "description": "date in UTC when token expires",
+                                "type": "string",
+                                "format": "date-time"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid username/password supplied"
+                    }
+                }
+            }
+        },
         "/roles": {
             "get": {
                 "tags": [
@@ -450,38 +503,6 @@
                         "description": "OK"
                     }
                 }
-            },
-            "delete": {
-                "tags": [
-                    "users"
-                ],
-                "summary": "Elimina un usuario",
-                "description": "",
-                "operationId": "delete_user",
-                "produces": [
-                    "application/xml",
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID de un usuario",
-                        "required": true,
-                        "type": "integer"
-                    }
-                ],
-                "responses": {
-                    "401": {
-                        "description": "Invalid ID supplied"
-                    },
-                    "402": {
-                        "description": "User not found"
-                    },
-                    "200": {
-                        "description": "OK"
-                    }
-                }
             }
         }
     },
@@ -539,25 +560,32 @@
             ],
             "properties": {
                 "first_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Jhon"
                 },
                 "last_name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Doe"
                 },
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "jhon@doe.com"
                 },
                 "passport": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "34335174"
                 },
                 "birthday": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "1989/04/09"
                 },
                 "password": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "jhondoe"
                 },
                 "password_confirmation": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "jhondoe"
                 }
             },
             "type": "object",

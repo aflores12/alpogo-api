@@ -3,12 +3,9 @@
 namespace AlpogoApi\Http\Controllers;
 
 use AlpogoApi\Alpogo\HTTP\HttpCodes;
-use AlpogoApi\Alpogo\Repositories\RoleRepository;
+use AlpogoApi\Alpogo\Repositories\AuthRepository;
 use AlpogoApi\Alpogo\Repositories\UserRepository;
-use AlpogoApi\Alpogo\Responses\Errors\ErrorResponses;
-use AlpogoApi\Alpogo\Responses\Success\SuccessResponses;
 use AlpogoApi\Alpogo\Transformers\UserTransform;
-use AlpogoApi\Model\User\Role;
 use AlpogoApi\Model\User\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -17,6 +14,7 @@ class UserController extends ApiController
 {
 
     use UserRepository;
+    use AuthRepository;
 
     /**
      * @var UserTransform
@@ -87,7 +85,6 @@ class UserController extends ApiController
      */
     public function store(Request $request)
     {
-
         $validator = $this->validateUser($request);
 
         if ($validator->fails())
@@ -208,53 +205,5 @@ class UserController extends ApiController
         return $response;
     }
 
-    /**
-     * @SWG\Delete(
-     *     path="/users/{id}",
-     *     summary="Elimina un usuario",
-     *     description="",
-     *     operationId="delete_user",
-     *     produces={"application/xml", "application/json"},
-     *     tags={"users"},
-     *     @SWG\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="ID de un usuario",
-     *         type="integer",
-     *         required=true
-     *     ),
-     *     @SWG\Response(
-     *         response=401,
-     *         description="Invalid ID supplied"
-     *     ),
-     *     @SWG\Response(
-     *         response=402,
-     *         description="User not found"
-     *     ),
-     *     @SWG\Response(
-     *         response=200,
-     *         description="OK",
-     *     )
-     * )
-     */
-    public function destroy($id)
-    {
-        $user = User::find($id);
-
-        if( ! is_numeric($id))
-            return $this->errorResponses->invalidIdSupplied();
-
-        if( ! $user )
-            return $this->errorResponses->userNotFound();
-
-        User::destroy($id);
-
-        $response = new JsonResponse([
-            'message' => 'User deleted successfully'
-        ], HttpCodes::OK);
-
-        return $response;
-
-    }
 
 }

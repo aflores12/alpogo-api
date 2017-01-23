@@ -67,7 +67,7 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => AlpogoApi\User::class,
+            'model' => \AlpogoApi\Model\User\User::class,
         ],
 
         // 'users' => [
