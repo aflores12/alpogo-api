@@ -67,6 +67,15 @@ class User extends Authenticatable
     }
 
     /**
+     * Retorna el key asociado al usuario
+     * @return mixed
+     */
+    public function accessToken()
+    {
+        return $this::hasOne(AccessToken::class);
+    }
+
+    /**
      * @param $request
      * @return $this
      */

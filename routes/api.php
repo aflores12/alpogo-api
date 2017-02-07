@@ -14,7 +14,11 @@ use Illuminate\Http\Request;
 */
 
 Route::resource('users', 'UserController');
-Route::post('users/login', 'Auth\AuthController@login');
+
+Route::get('user', 'UserController@show')->middleware('accesstoken');
+
+Route::post('login', 'Auth\AuthController@login');
+Route::post('registration', 'Auth\AuthController@registration');
 
 Route::get('roles', 'RoleController@index');
 Route::get('users/{id}/roles', 'RoleController@show');
@@ -25,9 +29,5 @@ Route::get('artists', 'ArtistController@index');
 Route::get('users/{id}/artist', 'ArtistController@show');
 Route::post('users/{id}/artist', 'ArtistController@attach');
 Route::delete('users/{id}/artist', 'ArtistController@detach');
-
-/*Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');*/
 
 

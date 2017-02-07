@@ -8,12 +8,20 @@
 
 namespace AlpogoApi\Alpogo\Repositories;
 
+use AlpogoApi\Model\User\AccessToken;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
 Trait AuthRepository
 {
 
+    use AccessTokenRepository;
+
+    /**
+     * Realiza validaciones de formulario, y requermientos.
+     * @param $request
+     * @return mixed
+     */
     public function validateLogin($request)
     {
         $validator = Validator::make($request->all(), [
@@ -24,17 +32,35 @@ Trait AuthRepository
         return $validator;
     }
 
+    /**
+     * Realiza un intento de login
+     * @param $email
+     * @param $password
+     * @return mixed
+     */
     public function attemptLogin($email, $password)
     {
-        if(Auth::once(['email' => $email, 'password' => $password]))
+        if(Auth::once(['email' => $email, 'password' => $password])) {
+
+            $user = Auth::user();
+
+            $accessToken = $this->getAccessToken($user);
+
             return $this->successResponses->respondSuccess([
                 'message' => 'Login successfully',
-                'user' => Auth::user()
+                'key' => $accessToken
             ]);
+
+        }
 
         return $this->errorResponses->failLogin();
     }
 
+    /**
+     * Auntentifica un usuario. Concentra validaciones e intentos de login.
+     * @param $request
+     * @return mixed
+     */
     public function authenticate($request)
     {
         $validator = $this->validateLogin($request);

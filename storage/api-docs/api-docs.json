@@ -157,10 +157,10 @@
                 }
             }
         },
-        "/users/login": {
+        "/login": {
             "post": {
                 "tags": [
-                    "users"
+                    "login"
                 ],
                 "summary": "Logs user into the system",
                 "description": "",
@@ -206,6 +206,43 @@
                     },
                     "400": {
                         "description": "Invalid username/password supplied"
+                    }
+                }
+            }
+        },
+        "/registration": {
+            "post": {
+                "tags": [
+                    "registration"
+                ],
+                "summary": "Registra un usuario",
+                "description": "",
+                "operationId": "post_user",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "201": {
+                        "description": "Create successfully"
                     }
                 }
             }
@@ -386,61 +423,17 @@
                         "description": "OK"
                     }
                 }
-            },
-            "post": {
-                "tags": [
-                    "users"
-                ],
-                "summary": "Registra un usuario",
-                "description": "",
-                "operationId": "post_user",
-                "consumes": [
-                    "application/json",
-                    "application/xml"
-                ],
-                "produces": [
-                    "application/xml",
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "description": "",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/User"
-                        }
-                    }
-                ],
-                "responses": {
-                    "400": {
-                        "description": "Invalid input"
-                    },
-                    "201": {
-                        "description": "Create successfully"
-                    }
-                }
             }
         },
-        "/users/{id}": {
+        "/user/": {
             "get": {
                 "tags": [
                     "users"
                 ],
                 "summary": "Detalle de usuario",
-                "description": "Retorna el detalle de un usaurio",
+                "description": "Retorna el detalle de un usaurio, parametro de access token Authorization por header.",
                 "produces": [
                     "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID de un usuario",
-                        "required": true,
-                        "type": "integer"
-                    }
                 ],
                 "responses": {
                     "200": {
@@ -459,7 +452,9 @@
                         }
                     }
                 }
-            },
+            }
+        },
+        "/users/{id}": {
             "put": {
                 "tags": [
                     "users"

@@ -52,5 +52,6 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \AlpogoApi\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'accesstoken' => \AlpogoApi\Http\Middleware\VerifyAccessToken::class,
     ];
 }

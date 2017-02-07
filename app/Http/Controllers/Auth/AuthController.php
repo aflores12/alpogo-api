@@ -2,9 +2,12 @@
 
 namespace AlpogoApi\Http\Controllers\Auth;
 
+use AlpogoApi\Alpogo\HTTP\HttpCodes;
 use AlpogoApi\Alpogo\Repositories\AuthRepository;
+use AlpogoApi\Alpogo\Repositories\UserRepository;
 use AlpogoApi\Alpogo\Responses\Errors\ErrorResponses;
 use AlpogoApi\Alpogo\Responses\Success\SuccessResponses;
+use AlpogoApi\Model\User\User;
 use Illuminate\Http\Request;
 use AlpogoApi\Http\Controllers\Controller;
 
@@ -12,10 +15,12 @@ class AuthController extends Controller
 {
 
     use AuthRepository;
+    use UserRepository;
 
     protected $errorResponses;
 
     protected $successResponses;
+
 
     public function __construct(
         ErrorResponses $errorResponses,
@@ -27,8 +32,8 @@ class AuthController extends Controller
     }
 
     /**
-     * @SWG\Post(path="/users/login",
-     *   tags={"users"},
+     * @SWG\Post(path="/login",
+     *   tags={"login"},
      *   summary="Logs user into the system",
      *   description="",
      *   operationId="loginUser",
@@ -70,6 +75,49 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         return $this->authenticate($request);
+    }
+
+    /**
+     * @SWG\Post(
+     *     path="/registration",
+     *     tags={"registration"},
+     *     operationId="post_user",
+     *     summary="Registra un usuario",
+     *     description="",
+     *     consumes={"application/json", "application/xml"},
+     *     produces={"application/xml", "application/json"},
+     *     @SWG\Parameter(
+     *         name="body",
+     *         in="body",
+     *         description="",
+     *         required=true,
+     *         @SWG\Schema(ref="#/definitions/User"),
+     *     ),
+     *     @SWG\Response(
+     *         response=400,
+     *         description="Invalid input",
+     *     ),
+     *     @SWG\Response(
+     *         response=201,
+     *         description="Create successfully",
+     *     )
+     * )
+     */
+    public function registration(Request $request)
+    {
+        $validator = $this->validateUser($request);
+
+        if ($validator->fails())
+            return $this->errorResponses->requiredParameters($validator->messages());
+
+        $user = User::create($request->all())->storePassword($request);
+
+        $response = $this->successResponses->createSuccess([
+            'message' => 'User create successfully',
+            'key' => $this->getAccessToken($user)
+        ]);
+
+        return $response;
     }
 
 }

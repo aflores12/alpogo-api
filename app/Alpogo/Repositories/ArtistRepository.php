@@ -8,7 +8,6 @@
 
 namespace AlpogoApi\Alpogo\Repositories;
 
-
 use Illuminate\Support\Facades\Validator;
 
 Trait ArtistRepository
