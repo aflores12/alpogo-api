@@ -28,6 +28,10 @@ class ErrorResponses extends Responses
     {
         return $this->setStatusCode(HttpCodes::ROLE_NOT_FOUND)->respondWithError('Role not found.');
     }
+    public function eventNotFound()
+    {
+        return $this->setStatusCode(HttpCodes::EVENT_NOT_FOUND)->respondWithError('Event not found.');
+    }
 
     public function artistNotFound()
     {
@@ -52,6 +56,11 @@ class ErrorResponses extends Responses
     public function userHasAnArtist()
     {
         return $this->setStatusCode(HttpCodes::ALREADY_HAS)->respondWithError('User already has an artist.');
+    }
+
+    public function dontHavePermission()
+    {
+        return $this->setStatusCode(HttpCodes::PERMISSION_DENIED)->respondWithError('Permission denied.');
     }
 
 }

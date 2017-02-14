@@ -3,6 +3,7 @@
 namespace AlpogoApi\Http\Controllers;
 
 use AlpogoApi\Alpogo\HTTP\HttpCodes;
+use AlpogoApi\Alpogo\Repositories\AccessTokenRepository;
 use AlpogoApi\Alpogo\Repositories\AuthRepository;
 use AlpogoApi\Alpogo\Repositories\UserRepository;
 use AlpogoApi\Alpogo\Transformers\UserTransform;
@@ -34,8 +35,8 @@ class UserController extends ApiController
 
     /**
      * @SWG\Get(
-     *     path="/users",
-     *     tags={"users"},
+     *     path="/user/list",
+     *     tags={"user"},
      *     summary="Lista de usuarios",
      *     description="Retorna la lista de usuarios",
      *     produces={
@@ -61,7 +62,7 @@ class UserController extends ApiController
     /**
      * @SWG\Get(
      *     path="/user/",
-     *     tags={"users"},
+     *     tags={"user"},
      *     summary="Detalle de usuario",
      *     description="Retorna el detalle de un usaurio, parametro de access token Authorization por header.",
      *     produces={
@@ -87,6 +88,8 @@ class UserController extends ApiController
     {
         $access_token = $request->header('authorization');
 
+        $user = $this->getUserFromAccessToken($access_token);
+
         $user_id = AccessToken::where('key', $access_token)->first()->user_id;
 
         $user = User::find($user_id);
@@ -103,8 +106,8 @@ class UserController extends ApiController
 
     /**
      * @SWG\Put(
-     *     path="/users/{id}",
-     *     tags={"users"},
+     *     path="/user/{id}",
+     *     tags={"user"},
      *     operationId="put_user",
      *     summary="Edita un usuario",
      *     description="",

@@ -11,6 +11,7 @@ namespace AlpogoApi\Alpogo\Repositories;
 
 use AlpogoApi\Alpogo\Helpers\ArrayHelper;
 use AlpogoApi\Model\User\AccessToken;
+use AlpogoApi\Model\User\User;
 
 Trait AccessTokenRepository
 {
@@ -68,6 +69,18 @@ Trait AccessTokenRepository
         }
 
         return false;
+    }
+
+    /**
+     * Devuelve un usuario asociado a una KEY
+     * @param $accessToken
+     * @return mixed
+     */
+    public function getUserFromAccessToken($accessToken)
+    {
+        $user_id = AccessToken::where('key', $accessToken)->first()->user_id;
+        $user = User::find($user_id);
+        return $user;
     }
 
     /**

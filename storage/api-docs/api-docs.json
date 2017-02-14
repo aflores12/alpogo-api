@@ -247,6 +247,98 @@
                 }
             }
         },
+        "/event/list": {
+            "get": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "Lista de eventos",
+                "description": "Retorna la lista de eventos",
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/event/": {
+            "put": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "Crea un evento",
+                "description": "",
+                "operationId": "add_event",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Event"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "408": {
+                        "description": "Event not found"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "Crea un evento",
+                "description": "",
+                "operationId": "add_event",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Event"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/roles": {
             "get": {
                 "tags": [
@@ -264,34 +356,19 @@
                 }
             }
         },
-        "/users/{id}/roles": {
+        "/user/roles": {
             "get": {
                 "tags": [
-                    "roles"
+                    "user"
                 ],
                 "summary": "Detalle de roles de usuario",
                 "description": "Retorna los roles de un usuario",
                 "produces": [
                     "application/json"
                 ],
-                "parameters": [
-                    {
-                        "name": "id",
-                        "in": "path",
-                        "description": "ID de un usuario",
-                        "required": true,
-                        "type": "integer"
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK"
-                    },
-                    "401": {
-                        "description": "Invalid id",
-                        "schema": {
-                            "$ref": "#/definitions/ErrorModel"
-                        }
                     },
                     "402": {
                         "description": "User not found",
@@ -302,10 +379,10 @@
                 }
             }
         },
-        "/users/{id}/roles/": {
+        "/user/roles/": {
             "post": {
                 "tags": [
-                    "roles"
+                    "user"
                 ],
                 "summary": "A\u00f1ade un rol al usuario",
                 "description": "",
@@ -360,10 +437,10 @@
                 }
             }
         },
-        "/users/{id}/roles/{slug}": {
+        "/user/roles/{slug}": {
             "delete": {
                 "tags": [
-                    "roles"
+                    "user"
                 ],
                 "summary": "Sustrae un rol al usuario",
                 "description": "",
@@ -408,10 +485,10 @@
                 }
             }
         },
-        "/users": {
+        "/user/list": {
             "get": {
                 "tags": [
-                    "users"
+                    "user"
                 ],
                 "summary": "Lista de usuarios",
                 "description": "Retorna la lista de usuarios",
@@ -428,7 +505,7 @@
         "/user/": {
             "get": {
                 "tags": [
-                    "users"
+                    "user"
                 ],
                 "summary": "Detalle de usuario",
                 "description": "Retorna el detalle de un usaurio, parametro de access token Authorization por header.",
@@ -454,10 +531,10 @@
                 }
             }
         },
-        "/users/{id}": {
+        "/user/{id}": {
             "put": {
                 "tags": [
-                    "users"
+                    "user"
                 ],
                 "summary": "Edita un usuario",
                 "description": "",
@@ -543,6 +620,51 @@
             "type": "object",
             "xml": {
                 "name": "Artist"
+            }
+        },
+        "Event": {
+            "required": [
+                "title",
+                "short_description",
+                "description",
+                "start_date",
+                "end_date",
+                "locale",
+                "location"
+            ],
+            "properties": {
+                "title": {
+                    "type": "string",
+                    "example": "Jhon"
+                },
+                "short_description": {
+                    "type": "string",
+                    "example": "Lorem ipsum"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "Lorem ipsum"
+                },
+                "start_date": {
+                    "type": "string",
+                    "example": "1989/09/04"
+                },
+                "end_date": {
+                    "type": "string",
+                    "example": "1989/09/04"
+                },
+                "locale": {
+                    "type": "string",
+                    "example": "Club Paraguay"
+                },
+                "location": {
+                    "type": "string",
+                    "example": "C\u00f3rdoba, Argentina"
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Event"
             }
         },
         "User": {

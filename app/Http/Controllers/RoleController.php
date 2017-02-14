@@ -10,6 +10,7 @@ namespace AlpogoApi\Http\Controllers;
 
 
 use AlpogoApi\Alpogo\HTTP\HttpCodes;
+use AlpogoApi\Alpogo\Repositories\AccessTokenRepository;
 use AlpogoApi\Alpogo\Repositories\RoleRepository;
 use AlpogoApi\Alpogo\Responses\Errors\ErrorResponses;
 use AlpogoApi\Alpogo\Responses\Success\SuccessResponses;
@@ -21,6 +22,7 @@ use Illuminate\Http\Request;
 class RoleController extends ApiController
 {
 
+    use AccessTokenRepository;
     use RoleRepository;
 
     /**
@@ -48,39 +50,24 @@ class RoleController extends ApiController
      */
     public function index()
     {
-        $roles = Role::all();
-
         $response = $this->successResponses->respond(
-            $roles
+            Role::all()
         );
-
         $response->send();
     }
 
     /**
      * @SWG\Get(
-     *     path="/users/{id}/roles",
-     *     tags={"roles"},
+     *     path="/user/roles",
+     *     tags={"user"},
      *     summary="Detalle de roles de usuario",
      *     description="Retorna los roles de un usuario",
      *     produces={
      *         "application/json",
      *     },
-     *     @SWG\Parameter(
-     *         name="id",
-     *         in="path",
-     *         description="ID de un usuario",
-     *         type="integer",
-     *         required=true
-     *     ),
      *     @SWG\Response(
      *         response=200,
      *         description="OK"
-     *     ),
-     *     @SWG\Response(
-     *         response="401",
-     *         description="Invalid id",
-     *         @SWG\Schema(ref="#/definitions/ErrorModel")
      *     ),
      *     @SWG\Response(
      *         response="402",
@@ -89,12 +76,9 @@ class RoleController extends ApiController
      *     )
      * )
      */
-    public function show($id)
+    public function show(Request $request)
     {
-        $user = User::find($id);
-
-        if( ! is_numeric($id))
-            return $this->errorResponses->invalidIdSupplied();
+        $user = $this->getUserFromAccessToken($request->header('authorization'));
 
         if( ! $user )
             return $this->errorResponses->userNotFound();
@@ -109,8 +93,8 @@ class RoleController extends ApiController
 
     /**
      * @SWG\Post(
-     *     path="/users/{id}/roles/",
-     *     tags={"roles"},
+     *     path="/user/roles/",
+     *     tags={"user"},
      *     operationId="attach_role_user",
      *     summary="Añade un rol al usuario",
      *     description="",
@@ -158,7 +142,7 @@ class RoleController extends ApiController
      *     )
      * )
      */
-    public function attach(Request $request, $id)
+    public function attach(Request $request)
     {
 
         $validator = $this->validateRole($request);
@@ -166,10 +150,7 @@ class RoleController extends ApiController
         if ($validator->fails())
             return $this->errorResponses->requiredParameters($validator->messages());
 
-        if( ! is_numeric($id))
-            return $this->errorResponses->invalidIdSupplied();
-
-        $user = User::find($id);
+        $user = $this->getUserFromAccessToken($request->header('authorization'));
 
         $role = Role::where('slug', $request->slug)->first();
 
@@ -181,9 +162,7 @@ class RoleController extends ApiController
 
         $user->roles()->attach($role->id);
 
-        $response = new JsonResponse([
-            'Role attached successfully.'
-        ], HttpCodes::OK);
+        $response = $this->successResponses->respondSuccess('Role attached successfully.');
 
         return $response;
 
@@ -191,8 +170,8 @@ class RoleController extends ApiController
 
     /**
      * @SWG\Delete(
-     *     path="/users/{id}/roles/{slug}",
-     *     tags={"roles"},
+     *     path="/user/roles/{slug}",
+     *     tags={"user"},
      *     operationId="detach_role_user",
      *     summary="Sustrae un rol al usuario",
      *     description="",
@@ -230,13 +209,10 @@ class RoleController extends ApiController
      *     )
      * )
      */
-    public function detach($id, $slug)
+    public function detach(Request $request, $slug)
     {
 
-        if( ! is_numeric($id))
-            return $this->errorResponses->invalidIdSupplied();
-
-        $user = User::find($id);
+        $user = $this->getUserFromAccessToken($request->header('authorization'));
         $role = Role::where('slug', $slug)->first();
 
         if( ! $user )
@@ -247,9 +223,7 @@ class RoleController extends ApiController
 
         $user->roles()->detach($role->id);
 
-        $response = new JsonResponse([
-            'Role detached successfully.'
-        ], HttpCodes::OK);
+        $response = $this->successResponses->respondSuccess('Role detached successfully.');
 
         return $response;
     }
