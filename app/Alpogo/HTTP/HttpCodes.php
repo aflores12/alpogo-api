@@ -27,6 +27,12 @@ abstract class HttpCodes
 
     const EVENT_NOT_FOUND = 408;
 
+    const TICKET_NOT_FOUND = 409;
+
+    const ITEM_TYPE_NOT_FOUND = 410;
+
+    const ITEM_NOT_FOUND = 411;
+
     const ALREADY_HAS = 405;
 
     const ARTIST_NOT_FOUND = 406;

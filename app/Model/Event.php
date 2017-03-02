@@ -25,4 +25,19 @@ class Event extends Model
 
     }
 
+    public function tickets()
+    {
+        return $this->hasMany(Ticket::class);
+    }
+
+    public function promotions()
+    {
+        return $this->hasMany(Promotion::class);
+    }
+
+    public function items()
+    {
+        return $this->hasMany(Item::class);
+    }
+
 }

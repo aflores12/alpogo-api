@@ -13,41 +13,107 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::resource('users', 'UserController');
-
 Route::group([
-    'prefix' => 'user',
-    'middleware' => 'accesstoken'
+    'prefix' => 'user'
 ], function () {
 
-    Route::get('/', 'UserController@show');
+    Route::get('/', 'UserController@show')->middleware('accesstoken');
 
-    Route::get('roles', 'RoleController@show');
+    Route::get('list', 'UserController@index');
 
-    Route::post('roles', 'RoleController@attach');
+    Route::get('roles', 'RoleController@show')->middleware('accesstoken');
 
-    Route::delete('roles/{slug}', 'RoleController@detach');
+    Route::post('roles', 'RoleController@attach')->middleware('accesstoken');
+
+    Route::delete('roles/{slug}', 'RoleController@detach')->middleware('accesstoken');
 
 });
 
 Route::get('event/list', 'EventController@index');
 
 Route::group([
-   'prefix' => 'event',
-    'middleware' => 'accesstoken'
+   'prefix' => 'event'
 ], function () {
 
-    Route::get('/', 'EventController@show');
+    Route::get('/{slug}', 'EventController@show');
 
     Route::post('/', 'EventController@store');
 
     Route::put('/{slug}', 'EventController@update');
 
+    Route::patch('/{slug}', 'EventController@partialUpdate');
+
+    Route::get('/{slug}/items', 'EventController@items');
+
+    Route::group([
+        'prefix' => '{slug}/ticket'
+    ] , function () {
+
+        Route::post('/', 'TicketController@store');
+
+        Route::get('/', 'TicketController@show');
+
+        Route::put('/{id}', 'TicketController@update');
+
+        Route::patch('/{id}', 'TicketController@partialUpdate');
+
+    });
+
+    Route::group([
+        'prefix' => '{slug}/promotion'
+    ] , function () {
+
+        Route::post('/', 'PromotionController@store');
+
+        Route::get('/', 'PromotionController@show');
+
+        Route::put('/{id}', 'PromotionController@update');
+
+        Route::patch('/{id}', 'PromotionController@partialUpdate');
+
+    });
+
 });
 
+Route::group([
+    'prefix' => 'item'
+], function () {
 
-Route::post('login', 'Auth\AuthController@login');
-Route::post('registration', 'Auth\AuthController@registration');
+    Route::get('/{id}', 'ItemController@show');
+
+    Route::post('/{slug}/{slug_item_type}', 'ItemController@store');
+
+    Route::put('/{id}', 'ItemController@update');
+
+    Route::patch('/{id}', 'ItemController@partialUpdate');
+
+    Route::delete('/{id}', 'ItemController@destroy');
+
+    Route::group([
+        'prefix' => 'type'
+    ], function () {
+
+        Route::get('{slug}', 'ItemTypeController@show');
+
+        Route::post('/', 'ItemTypeController@store');
+
+        Route::put('/{slug}', 'ItemTypeController@update');
+
+        Route::delete('/{slug}', 'ItemTypeController@destroy');
+
+    });
+
+});
+
+Route::group([
+    'prefix' => 'account'
+], function () {
+
+    Route::post('login', 'Auth\AuthController@login');
+
+    Route::post('registration', 'Auth\AuthController@registration');
+
+});
 
 Route::get('roles', 'RoleController@index');
 

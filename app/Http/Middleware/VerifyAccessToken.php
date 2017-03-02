@@ -2,14 +2,13 @@
 
 namespace AlpogoApi\Http\Middleware;
 
-use AlpogoApi\Alpogo\Repositories\AccessTokenRepository;
 use AlpogoApi\Model\User\AccessToken;
 use Closure;
+use Illuminate\Http\JsonResponse;
 
 class VerifyAccessToken
 {
 
-    use AccessTokenRepository;
 
     /**
      * Handle an incoming request.
@@ -21,10 +20,12 @@ class VerifyAccessToken
     public function handle($request, Closure $next)
     {
         $access_token = $request->header('authorization');
-        //dd($access_token);
         //dd(AccessToken::where('key', $access_token)->first());
         if(!AccessToken::where('key', $access_token)->first()) {
-            abort(404);
+            return new JsonResponse([
+                'message' => 'No access.',
+                'code' => 404
+            ], 404);
         }
 
         return $next($request);

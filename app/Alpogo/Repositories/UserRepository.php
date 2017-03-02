@@ -2,11 +2,15 @@
 
 namespace AlpogoApi\Alpogo\Repositories;
 
+use AlpogoApi\Alpogo\Helpers\ImageHelper;
+use AlpogoApi\Model\User\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Validator;
 
 Trait UserRepository
 {
+
+    protected $imagePath = '/images/users/';
 
     /**
      * Reglas de validación
@@ -32,6 +36,24 @@ Trait UserRepository
         );
 
         return $validator;
+    }
+
+    public function updateUser($request)
+    {
+
+        $image = ImageHelper::base64ToImage($this->imagePath, $request);
+
+        $user = new User();
+
+        $user->first_name = $request->first_name;
+        $user->last_name = $request->last_name;
+        $user->email = $request->email;
+        $user->passport = $request->passport;
+        $user->birthday = $request->birthday;
+        $user->avatar = $image;
+
+        return $user;
+
     }
 
 

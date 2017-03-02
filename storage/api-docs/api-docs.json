@@ -157,12 +157,12 @@
                 }
             }
         },
-        "/login": {
+        "/account/login": {
             "post": {
                 "tags": [
-                    "login"
+                    "account"
                 ],
-                "summary": "Logs user into the system",
+                "summary": "Logea un usuario",
                 "description": "",
                 "operationId": "loginUser",
                 "produces": [
@@ -210,10 +210,10 @@
                 }
             }
         },
-        "/registration": {
+        "/account/registration": {
             "post": {
                 "tags": [
-                    "registration"
+                    "account"
                 ],
                 "summary": "Registra un usuario",
                 "description": "",
@@ -265,44 +265,6 @@
             }
         },
         "/event/": {
-            "put": {
-                "tags": [
-                    "event"
-                ],
-                "summary": "Crea un evento",
-                "description": "",
-                "operationId": "add_event",
-                "consumes": [
-                    "application/json",
-                    "application/xml"
-                ],
-                "produces": [
-                    "application/xml",
-                    "application/json"
-                ],
-                "parameters": [
-                    {
-                        "name": "body",
-                        "in": "body",
-                        "description": "",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/Event"
-                        }
-                    }
-                ],
-                "responses": {
-                    "400": {
-                        "description": "Invalid input"
-                    },
-                    "408": {
-                        "description": "Event not found"
-                    },
-                    "200": {
-                        "description": "OK"
-                    }
-                }
-            },
             "post": {
                 "tags": [
                     "event"
@@ -332,6 +294,710 @@
                 "responses": {
                     "400": {
                         "description": "Invalid input"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/event/{slug}": {
+            "get": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "Detalle de un evento",
+                "description": "",
+                "operationId": "show_event",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "Edita un evento",
+                "description": "",
+                "operationId": "update_event",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Event"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "408": {
+                        "description": "Event not found"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "Edita parcialmente un evento",
+                "description": "",
+                "operationId": "partial_update_event",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Event"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "408": {
+                        "description": "Event not found"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/event/{slug}/items": {
+            "get": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "Lista de items de un evento",
+                "description": "Retorna la lista de items de un eventos",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "408": {
+                        "description": "Event not found"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/item/{slug}/{slug_item_type}": {
+            "post": {
+                "tags": [
+                    "item"
+                ],
+                "summary": "A\u00f1ade un item al evento",
+                "description": "",
+                "operationId": "add_item_to_event",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "Slug de un evento",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "slug_item_type",
+                        "in": "path",
+                        "description": "Slug de un tipo de item",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Item"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "408": {
+                        "description": "Event not found"
+                    },
+                    "410": {
+                        "description": "Item type not found"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/item/{id}": {
+            "get": {
+                "tags": [
+                    "item"
+                ],
+                "summary": "Detalle de un item",
+                "description": "",
+                "operationId": "get_item",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "411": {
+                        "description": "Item not found"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "item"
+                ],
+                "summary": "Edita un item",
+                "description": "",
+                "operationId": "update_item",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Item"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "411": {
+                        "description": "Item not found"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "item"
+                ],
+                "summary": "Elimina un item",
+                "description": "",
+                "operationId": "destroy_item",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "411": {
+                        "description": "Item not found"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "item"
+                ],
+                "summary": "Edita parcialmente un item",
+                "description": "",
+                "operationId": "partial_update_item",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "integer"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Item"
+                        }
+                    }
+                ],
+                "responses": {
+                    "411": {
+                        "description": "Item not found"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/item/type": {
+            "post": {
+                "tags": [
+                    "item"
+                ],
+                "summary": "A\u00f1ade un tipo de item",
+                "description": "",
+                "operationId": "add_item_type",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ItemType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/item/type/{slug}": {
+            "get": {
+                "tags": [
+                    "item"
+                ],
+                "summary": "Detalle de un tipo de item",
+                "description": "",
+                "operationId": "get_item_type",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "410": {
+                        "description": "Item Type not found"
+                    },
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "put": {
+                "tags": [
+                    "item"
+                ],
+                "summary": "Edita un tipo de item",
+                "description": "",
+                "operationId": "update_item_type",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/ItemType"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "410": {
+                        "description": "Item Type not found"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/item/type/{id}": {
+            "delete": {
+                "tags": [
+                    "item"
+                ],
+                "summary": "Elimina un tipo de item",
+                "description": "",
+                "operationId": "destroy_item_type",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "integer"
+                    }
+                ],
+                "responses": {
+                    "410": {
+                        "description": "Item type not found"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/event/{slug}/promotion": {
+            "get": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "A\u00f1ade una promoci\u00f3n al evento",
+                "description": "",
+                "operationId": "get_promotion_from_event",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "A\u00f1ade una promoci\u00f3n al evento",
+                "description": "",
+                "operationId": "add_promotion_to_event",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Promotion"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "408": {
+                        "description": "Event not found"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/event/{slug}/promotion/{id}": {
+            "put": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "Edita una promoci\u00f3n de un evento",
+                "description": "",
+                "operationId": "update_promotion_of_event",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Promotion"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "408": {
+                        "description": "Event not found"
+                    },
+                    "409": {
+                        "description": "Ticket not found"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "Edita parcialmente una promoci\u00f3n de un evento",
+                "description": "",
+                "operationId": "partial_update_promotion_of_event",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Promotion"
+                        }
+                    }
+                ],
+                "responses": {
+                    "408": {
+                        "description": "Event not found"
+                    },
+                    "409": {
+                        "description": "Ticket not found"
                     },
                     "201": {
                         "description": "OK"
@@ -485,6 +1151,192 @@
                 }
             }
         },
+        "/event/{slug}/ticket": {
+            "get": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "A\u00f1ade un ticket al evento",
+                "description": "",
+                "operationId": "get_ticket_from_event",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "A\u00f1ade un ticket al evento",
+                "description": "",
+                "operationId": "add_ticket_to_event",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Ticket"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "408": {
+                        "description": "Event not found"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
+        "/event/{slug}/ticket/{id}": {
+            "put": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "Edita un ticket de un evento",
+                "description": "",
+                "operationId": "update_ticket_of_event",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Ticket"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Invalid input"
+                    },
+                    "408": {
+                        "description": "Event not found"
+                    },
+                    "409": {
+                        "description": "Ticket not found"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "event"
+                ],
+                "summary": "Edita parcialmente un ticket de un evento",
+                "description": "",
+                "operationId": "partial_update_ticket_of_event",
+                "consumes": [
+                    "application/json",
+                    "application/xml"
+                ],
+                "produces": [
+                    "application/xml",
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "slug",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "body",
+                        "in": "body",
+                        "description": "",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/Ticket"
+                        }
+                    }
+                ],
+                "responses": {
+                    "408": {
+                        "description": "Event not found"
+                    },
+                    "409": {
+                        "description": "Ticket not found"
+                    },
+                    "201": {
+                        "description": "OK"
+                    }
+                }
+            }
+        },
         "/user/list": {
             "get": {
                 "tags": [
@@ -627,8 +1479,10 @@
                 "title",
                 "short_description",
                 "description",
+                "cover_image",
                 "start_date",
                 "end_date",
+                "age_restiction",
                 "locale",
                 "location"
             ],
@@ -645,6 +1499,10 @@
                     "type": "string",
                     "example": "Lorem ipsum"
                 },
+                "cover_image": {
+                    "type": "string",
+                    "example": ""
+                },
                 "start_date": {
                     "type": "string",
                     "example": "1989/09/04"
@@ -652,6 +1510,10 @@
                 "end_date": {
                     "type": "string",
                     "example": "1989/09/04"
+                },
+                "age_restriction": {
+                    "type": "string",
+                    "example": "18"
                 },
                 "locale": {
                     "type": "string",
@@ -667,11 +1529,137 @@
                 "name": "Event"
             }
         },
+        "Item": {
+            "required": [
+                "name",
+                "detail",
+                "picture",
+                "stock",
+                "amount",
+                "producer_amount"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "El item de Jhon"
+                },
+                "detail": {
+                    "type": "string",
+                    "example": "Detalle del item"
+                },
+                "picture": {
+                    "type": "string",
+                    "example": "/var/www/html/picture.jpg"
+                },
+                "stock": {
+                    "type": "string",
+                    "example": "123"
+                },
+                "amount": {
+                    "type": "string",
+                    "example": "123"
+                },
+                "producer_amount": {
+                    "type": "string",
+                    "example": "123"
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Item"
+            }
+        },
+        "ItemType": {
+            "required": [
+                "name"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "jhondoe"
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "ItemType"
+            }
+        },
+        "Promotion": {
+            "required": [
+                "detail",
+                "quantity",
+                "amount",
+                "producer_amount"
+            ],
+            "properties": {
+                "detail": {
+                    "type": "string",
+                    "example": "El detalle de Jhon"
+                },
+                "quantity": {
+                    "type": "string",
+                    "example": "21"
+                },
+                "amount": {
+                    "type": "string",
+                    "example": "123"
+                },
+                "producer_amount": {
+                    "type": "string",
+                    "example": "1234"
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Promotion"
+            }
+        },
+        "Ticket": {
+            "required": [
+                "name",
+                "stock",
+                "amount",
+                "producer_amount",
+                "start_date",
+                "end_date"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "El ticket de Jhon"
+                },
+                "stock": {
+                    "type": "string",
+                    "example": "21"
+                },
+                "amount": {
+                    "type": "string",
+                    "example": "123"
+                },
+                "producer_amount": {
+                    "type": "string",
+                    "example": "123"
+                },
+                "start_date": {
+                    "type": "string",
+                    "example": "2017/04/09"
+                },
+                "end_date": {
+                    "type": "string",
+                    "example": "2017/04/20"
+                }
+            },
+            "type": "object",
+            "xml": {
+                "name": "Ticket"
+            }
+        },
         "User": {
             "required": [
                 "first_name",
                 "last_name",
                 "email",
+                "avatar",
                 "passport",
                 "birthday"
             ],
@@ -687,6 +1675,10 @@
                 "email": {
                     "type": "string",
                     "example": "jhon@doe.com"
+                },
+                "avatar": {
+                    "type": "string",
+                    "example": "/jhon/doe/avatar.jpg"
                 },
                 "passport": {
                     "type": "string",

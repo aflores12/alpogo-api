@@ -13,8 +13,10 @@ use Illuminate\Support\Facades\Validator;
 Trait EventRepository
 {
 
+    protected $imagePath = '/images/events/';
+
     private $eventRules = [
-        'title' => 'required',
+        'title' => 'required|unique:events',
         'short_description' => 'required',
         'description' => 'required',
         'start_date' => 'required|date_format:Y/m/d',

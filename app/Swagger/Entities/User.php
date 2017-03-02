@@ -3,7 +3,7 @@
 namespace AlpogoApi\Swagger\Entities;
 
 /**
- * @SWG\Definition(required={"first_name", "last_name", "email", "passport", "birthday"}, type="object", @SWG\Xml(name="User"))
+ * @SWG\Definition(required={"first_name", "last_name", "email", "avatar", "passport", "birthday"}, type="object", @SWG\Xml(name="User"))
  */
 class User {
 
@@ -24,6 +24,12 @@ class User {
      * @var string
      */
     public $email;
+
+    /**
+     * @SWG\Property(example="/jhon/doe/avatar.jpg")
+     * @var string
+     */
+    public $avatar;
 
     /**
      * @SWG\Property(example="34335174")

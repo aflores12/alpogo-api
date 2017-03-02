@@ -53,5 +53,25 @@ class DatabaseSeeder extends Seeder
             'slug' => str_slug('editar usuarios')
         ]);
 
+        DB::table('item_types')->insert([
+            'name' => 'Entrada',
+            'slug' => str_slug('Entrada')
+        ]);
+
+        DB::table('item_types')->insert([
+            'name' => 'Merchandising',
+            'slug' => str_slug('Merchandising')
+        ]);
+
+        DB::table('item_types')->insert([
+            'name' => 'Bebida',
+            'slug' => str_slug('Bebida')
+        ]);
+
+        DB::table('item_types')->insert([
+            'name' => 'Comida',
+            'slug' => str_slug('Comida')
+        ]);
+
     }
 }

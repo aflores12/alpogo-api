@@ -32,9 +32,9 @@ class AuthController extends Controller
     }
 
     /**
-     * @SWG\Post(path="/login",
-     *   tags={"login"},
-     *   summary="Logs user into the system",
+     * @SWG\Post(path="/account/login",
+     *   tags={"account"},
+     *   summary="Logea un usuario",
      *   description="",
      *   operationId="loginUser",
      *   produces={"application/xml", "application/json"},
@@ -79,8 +79,8 @@ class AuthController extends Controller
 
     /**
      * @SWG\Post(
-     *     path="/registration",
-     *     tags={"registration"},
+     *     path="/account/registration",
+     *     tags={"account"},
      *     operationId="post_user",
      *     summary="Registra un usuario",
      *     description="",

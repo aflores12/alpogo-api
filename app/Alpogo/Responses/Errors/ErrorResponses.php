@@ -28,14 +28,30 @@ class ErrorResponses extends Responses
     {
         return $this->setStatusCode(HttpCodes::ROLE_NOT_FOUND)->respondWithError('Role not found.');
     }
+
     public function eventNotFound()
     {
         return $this->setStatusCode(HttpCodes::EVENT_NOT_FOUND)->respondWithError('Event not found.');
     }
 
+    public function itemNotFound()
+    {
+        return $this->setStatusCode(HttpCodes::EVENT_NOT_FOUND)->respondWithError('Item not found.');
+    }
+
+    public function ticketNotFound()
+    {
+        return $this->setStatusCode(HttpCodes::EVENT_NOT_FOUND)->respondWithError('Ticket not found.');
+    }
+
     public function artistNotFound()
     {
         return $this->setStatusCode(HttpCodes::ARTIST_NOT_FOUND)->respondWithError('Artist not found.');
+    }
+
+    public function itemTypeNotFound()
+    {
+        return $this->setStatusCode(HttpCodes::ARTIST_NOT_FOUND)->respondWithError('Item type not found.');
     }
 
     public function invalidIdSupplied()

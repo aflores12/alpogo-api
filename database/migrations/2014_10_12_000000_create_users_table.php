@@ -20,6 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('birthday')->default('0000/00/00');
+            $table->string('avatar')->nullable();
             $table->string('token')->nulleable();
             $table->boolean('validated')->default(false);
             $table->string('last_login')->nulleable();

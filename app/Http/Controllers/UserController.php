@@ -2,14 +2,11 @@
 
 namespace AlpogoApi\Http\Controllers;
 
-use AlpogoApi\Alpogo\HTTP\HttpCodes;
-use AlpogoApi\Alpogo\Repositories\AccessTokenRepository;
 use AlpogoApi\Alpogo\Repositories\AuthRepository;
 use AlpogoApi\Alpogo\Repositories\UserRepository;
 use AlpogoApi\Alpogo\Transformers\UserTransform;
 use AlpogoApi\Model\User\AccessToken;
 use AlpogoApi\Model\User\User;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
 class UserController extends ApiController
@@ -90,10 +87,6 @@ class UserController extends ApiController
 
         $user = $this->getUserFromAccessToken($access_token);
 
-        $user_id = AccessToken::where('key', $access_token)->first()->user_id;
-
-        $user = User::find($user_id);
-
         if( ! $user )
             return $this->errorResponses->userNotFound();
 
@@ -150,12 +143,12 @@ class UserController extends ApiController
         if( ! $user )
             return $this->errorResponses->userNotFound();
 
-        $user->update($request->all());
+        $user = $this->updateUser($request->all());
 
-        $response = new JsonResponse([
+        $response = $this->successResponses->respond([
             'message' => 'User updated successfully',
             'user' => $user
-        ], HttpCodes::OK);
+        ]);
 
         return $response;
     }
