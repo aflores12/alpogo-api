@@ -4,7 +4,7 @@
         "title": "Alpogo API Documentation",
         "version": "1.0.0"
     },
-    "host": "http://aflores.com.ar",
+    "host": "aflores.com.ar",
     "basePath": "/api/v1/",
     "schemes": [
         "http"
