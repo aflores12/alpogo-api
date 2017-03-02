@@ -40,9 +40,7 @@ abstract class Responses
      */
     public function respond($data)
     {
-        $response =  new JsonResponse([
-            $data
-        ], $this->getStatusCode());
+        $response =  new JsonResponse($data, $this->getStatusCode());
 
         return $response;
     }
