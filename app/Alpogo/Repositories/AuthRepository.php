@@ -65,7 +65,7 @@ Trait AuthRepository
     {
         $validator = $this->validateLogin($request);
         if($validator->fails())
-            return $validator->messages();
+            return $this->errorResponses->setStatusCode(400)->respondWithValidator($validator->messages());
 
         return $this->attemptLogin($request->email, $request->password);
     }
