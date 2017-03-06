@@ -11,7 +11,7 @@ use AlpogoApi\Alpogo\Responses\Responses;
  * Date: 05/01/17
  * Time: 11:34
  */
-class ErrorResponses extends Responses
+class   ErrorResponses extends Responses
 {
 
     public function pageNotFound()
