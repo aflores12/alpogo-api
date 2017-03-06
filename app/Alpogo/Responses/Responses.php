@@ -52,10 +52,8 @@ abstract class Responses
     protected function respondWithError($message)
     {
         $response =  new JsonResponse([
-            'result' => [
-                'error' => $message,
-                'code' => $this->getStatusCode()
-            ]
+            'error' => $message,
+            'code' => $this->getStatusCode()
         ], $this->getStatusCode());
 
         return $response;
@@ -68,10 +66,8 @@ abstract class Responses
     public function respondWithValidator($data)
     {
         $response =  new JsonResponse([
-            'result' => [
-                'error' => $data,
-                'code' => $this->getStatusCode()
-            ]
+            'error' => $data,
+            'code' => $this->getStatusCode()
         ], $this->getStatusCode());
 
         return $response;
